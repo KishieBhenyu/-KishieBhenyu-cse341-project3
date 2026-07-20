@@ -1,0 +1,76 @@
+//LOCAL HOST
+###Get all books
+GET http://localhost:3001/books
+
+###Get a single book
+GET http://localhost:3001/books/6a5d31ca1acf118d67d029e3
+
+####Create a new book
+POST http://localhost:3001/books
+Content-Type: application/json
+
+{
+ "title": "Love story",
+ "author": "Tinevimbo Moyo",
+ "genre": "Romance",
+ "publishedYear": 20121,
+ "publisher": "Probook",
+ "availableCopies": 5,
+ "language": "English"
+}
+
+###Update a book
+PUT http://localhost:3001/books/6a5d31ca1acf118d67d029e3
+Content-Type: application/json
+
+{
+ "title": "The Great Gatsby",
+ "author": "F. Scott Fitzgerald",
+ "genre": "Drama",
+ "publishedYear": 1925,
+ "publisher": "Scribner",
+ "availableCopies": 10,
+ "language": "English"
+}
+
+###Delete a book
+DELETE http://localhost:3001/books/6a5dee73582ea10cd7db5270
+
+###Get all members
+GET http://localhost:3001/members
+
+###Get a single member
+GET http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+
+###Create a new member
+POST http://localhost:3001/members
+Content-Type: application/json
+
+{
+ 
+"firstName":"John",
+"lastName":"Moyo",
+"email":"john@gmail.com",
+"phone":"0771234567",
+"membershipDate":"2026-07-19",
+"gender":"Male",
+"age":30
+}
+
+###Update a member
+PUT http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+Content-Type: application/json
+
+{
+ "firstName":"Peter",
+ "lastName":"Moyo",
+ "email":"john@gmail.com",
+ "phone":"0771234567",
+ "membershipDate":"2026-07-19",
+ "gender":"Male",
+ "age":30
+}
+
+###Delete a member
+DELETE http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+
