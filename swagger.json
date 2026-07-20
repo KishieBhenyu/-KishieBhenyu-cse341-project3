@@ -126,12 +126,6 @@
                 "genre": {
                   "example": "any"
                 },
-                "publishedDate": {
-                  "example": "any"
-                },
-                "summary": {
-                  "example": "any"
-                },
                 "publishedYear": {
                   "example": "any"
                 },
