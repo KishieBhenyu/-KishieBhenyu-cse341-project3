@@ -47,39 +47,42 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": ""
                 },
                 "author": {
-                  "example": "any"
+                  "example": ""
                 },
                 "genre": {
-                  "example": "any"
+                  "example": ""
                 },
 
                 "publishedYear": {
-                  "example": "any"
+                  "example": ""
                 },
                 "publisher": {
-                  "example": "any"
+                  "example": ""
                 },
                 "availableCopies": {
-                  "example": "any"
+                  "example": ""
                 },
                 "language": {
-                  "example": "any"
+                  "example": ""
                 }
               }
             }
           }
         ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+  "responses": {
+  "201": {
+    "description": "Book created successfully"
+  },
+  "400": {
+    "description": "Bad Request - Missing required fields"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       }
     },
     "/books/{id}": {
@@ -96,11 +99,17 @@
             "type": "string"
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+       "responses": {
+  "200": {
+    "description": "Book found"
+  },
+  "404": {
+    "description": "Book not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       },
       "put": {
         "description": "",
@@ -118,41 +127,44 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": ""
                 },
                 "author": {
-                  "example": "any"
+                  "example": ""
                 },
                 "genre": {
-                  "example": "any"
+                  "example": ""
                 },
                 "publishedYear": {
-                  "example": "any"
+                  "example": ""
                 },
                 "publisher": {
-                  "example": "any"
+                  "example": ""
                 },
                 "availableCopies": {
-                  "example": "any"
+                  "example": ""
                 },
                 "language": {
-                  "example": "any"
+                  "example": ""
                 }
               }
             }
           }
         ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+       "responses": {
+  "204": {
+    "description": "Book updated successfully"
+  },
+  "400": {
+    "description": "Bad Request - Missing required fields"
+  },
+  "404": {
+    "description": "Book not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       },
       "delete": {
         "description": "",
@@ -165,13 +177,16 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+  "204": {
+    "description": "Deleted successfully"
+  },
+  "404": {
+    "description": "Resource not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       }
     },
     "/members/": {
@@ -196,38 +211,41 @@
               "type": "object",
               "properties": {
                 "firstName": {
-                  "example": "any"
+                  "example": ""
                 },
                 "lastName": {
-                  "example": "any"
+                  "example": ""
                 },
                 "email": {
-                  "example": "any"
+                  "example": ""
                 },
                 "phone": {
-                  "example": "any"
+                  "example": ""
                 },
                 "membershipDate": {
-                  "example": "any"
+                  "example": ""
                 },
                 "gender": {
-                  "example": "any"
+                  "example": ""
                 },
                 "age": {
-                  "example": "any"
+                  "example": ""
                 }
               }
             }
           }
         ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+       "responses": {
+  "201": {
+    "description": "Member created successfully"
+  },
+  "400": {
+    "description": "Bad Request - Missing required fields"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       }
     },
     "/members/{id}": {
@@ -245,10 +263,16 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+  "200": {
+    "description": "Member found"
+  },
+  "404": {
+    "description": "Member not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       },
       "put": {
         "description": "",
@@ -266,38 +290,44 @@
               "type": "object",
               "properties": {
                 "firstName": {
-                  "example": "any"
+                  "example": ""
                 },
                 "lastName": {
-                  "example": "any"
+                  "example": ""
                 },
                 "email": {
-                  "example": "any"
+                  "example": ""
                 },
                 "phone": {
-                  "example": "any"
+                  "example": ""
                 },
                 "membershipDate": {
-                  "example": "any"
+                  "example": ""
                 },
                 "gender": {
-                  "example": "any"
+                  "example": ""
                 },
                 "age": {
-                  "example": "any"
+                  "example": ""
                 }
               }
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+  "204": {
+    "description": "Member updated successfully"
+  },
+  "400": {
+    "description": "Bad Request - Missing required fields"
+  },
+  "404": {
+    "description": "Member not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       },
       "delete": {
         "description": "",
@@ -310,13 +340,16 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+  "204": {
+    "description": "Deleted successfully"
+  },
+  "404": {
+    "description": "Resource not found"
+  },
+  "500": {
+    "description": "Internal Server Error"
+  }
+}
       }
     }
   }
