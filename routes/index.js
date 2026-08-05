@@ -8,11 +8,7 @@ router.use("/", require("./swagger"));
 
 // Home
 router.get("/", (req, res) => {
-  if (req.user) {
-    res.json(req.user);
-  } else {
-    res.send("Logged Out");
-  }
+  res.send("THIS IS THE NEW HOME PAGE");
 });
 
 // Login with GitHub
