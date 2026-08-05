@@ -8,14 +8,8 @@ router.use("/", require("./swagger"));
 
 // Home
 router.get("/", (req, res) => {
-  if (req.isAuthenticated()) {
-    const githubName =
-      req.user.username ||
-      req.user._json?.login ||
-      req.user.displayName ||
-      "GitHub User";
-
-    res.send(`Logged in as ${githubName}`);
+  if (req.user) {
+    res.json(req.user);
   } else {
     res.send("Logged Out");
   }
