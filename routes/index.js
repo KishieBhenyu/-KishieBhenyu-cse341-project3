@@ -9,9 +9,14 @@ router.use("/", require("./swagger"));
 // Home
 router.get("/", (req, res) => {
   if (req.isAuthenticated()) {
-    res.send(
-      `Logged in as ${req.user.displayName || req.user.username}`
-    );
+    const name =
+      req.user.displayName ||
+      req.user.username ||
+      req.user._json?.login ||
+      req.user._json?.name ||
+      "GitHub User";
+
+    res.send(`Logged in as ${name}`);
   } else {
     res.send("Logged Out");
   }
