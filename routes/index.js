@@ -6,12 +6,34 @@ const router = express.Router();
 // Swagger
 router.use("/", require("./swagger"));
 
-// Home
+/*
+==========================================
+HOME
+==========================================
+*/
+
 router.get("/", (req, res) => {
-  res.send("THIS IS THE NEW HOME PAGE");
+  if (req.isAuthenticated()) {
+
+    const githubName =
+      req.user.username ||
+      req.user._json?.login ||
+      req.user.displayName ||
+      "GitHub User";
+
+    res.send(`Logged in as ${githubName}`);
+
+  } else {
+    res.send("Logged Out");
+  }
 });
 
-// Login with GitHub
+/*
+==========================================
+LOGIN
+==========================================
+*/
+
 router.get(
   "/login",
   passport.authenticate("github", {
@@ -19,7 +41,12 @@ router.get(
   })
 );
 
-// GitHub Callback
+/*
+==========================================
+CALLBACK
+==========================================
+*/
+
 router.get(
   "/github/callback",
   passport.authenticate("github", {
@@ -30,7 +57,12 @@ router.get(
   }
 );
 
-// Logout
+/*
+==========================================
+LOGOUT
+==========================================
+*/
+
 router.get("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) {
@@ -43,7 +75,12 @@ router.get("/logout", (req, res, next) => {
   });
 });
 
-// API Routes
+/*
+==========================================
+API ROUTES
+==========================================
+*/
+
 router.use("/books", require("./books"));
 router.use("/members", require("./members"));
 

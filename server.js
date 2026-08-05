@@ -11,9 +11,9 @@ const mongodb = require("./data/database");
 const app = express();
 const port = process.env.PORT || 3001;
 
-// ===========================
+// ======================
 // Middleware
-// ===========================
+// ======================
 
 app.use(bodyParser.json());
 
@@ -22,9 +22,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: false,
-    },
   })
 );
 
@@ -38,9 +35,9 @@ app.use(
   })
 );
 
-// ===========================
+// ======================
 // Passport GitHub Strategy
-// ===========================
+// ======================
 
 passport.use(
   new GitHubStrategy(
@@ -50,86 +47,37 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
       return done(null, profile);
     }
   )
 );
 
-// Save user in session
+// Store user in session
 passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-// Read user from session
+// Retrieve user from session
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// ===========================
-// Authentication Routes
-// ===========================
-
-// Login
-app.get(
-  "/login",
-  passport.authenticate("github", {
-    scope: ["user:email"],
-  })
-);
-
-// GitHub Callback
-app.get(
-  "/github/callback",
-  passport.authenticate("github", {
-    failureRedirect: "/",
-  }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
-
-// Logout
-app.get("/logout", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-
-    req.session.destroy(() => {
-      res.redirect("/");
-    });
-  });
-});
-
-// ===========================
-// Home Route
-// ===========================
-
-app.get("/", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.send(`Logged in as ${req.user.displayName}`);
-  } else {
-    res.send("Logged Out");
-  }
-});
-
-// ===========================
-// API Routes
-// ===========================
+// ======================
+// Routes
+// ======================
 
 app.use("/", require("./routes"));
 
-// ===========================
+// ======================
 // Start Server
-// ===========================
+// ======================
 
 mongodb.initDb((err) => {
   if (err) {
     console.error(err);
   } else {
     app.listen(port, () => {
-      console.log(`Database connected`);
+      console.log("Database connected");
       console.log(`Server running on port ${port}`);
     });
   }
