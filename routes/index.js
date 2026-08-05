@@ -3,12 +3,15 @@ const passport = require("passport");
 
 const router = express.Router();
 
+// Swagger
 router.use("/", require("./swagger"));
 
 // Home
 router.get("/", (req, res) => {
-  if (req.user) {
-    res.send(`Logged in as ${req.user.username}`);
+  if (req.isAuthenticated()) {
+    res.send(
+      `Logged in as ${req.user.displayName || req.user.username}`
+    );
   } else {
     res.send("Logged Out");
   }
@@ -39,7 +42,10 @@ router.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/");
+
+    req.session.destroy(() => {
+      res.redirect("/");
+    });
   });
 });
 

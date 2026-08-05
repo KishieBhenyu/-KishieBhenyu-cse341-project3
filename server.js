@@ -11,7 +11,10 @@ const mongodb = require("./data/database");
 const app = express();
 const port = process.env.PORT || 3001;
 
+// ===========================
 // Middleware
+// ===========================
+
 app.use(bodyParser.json());
 
 app.use(
@@ -19,28 +22,26 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: false,
+    },
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
-
+// ===========================
 // Passport GitHub Strategy
+// ===========================
+
 passport.use(
   new GitHubStrategy(
     {
@@ -49,32 +50,86 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
       return done(null, profile);
     }
   )
 );
 
-// Serialize User
+// Save user in session
 passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-// Deserialize User
+// Read user from session
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// Routes
-app.use("/", require("./routes/index"));
+// ===========================
+// Authentication Routes
+// ===========================
 
+// Login
+app.get(
+  "/login",
+  passport.authenticate("github", {
+    scope: ["user:email"],
+  })
+);
+
+// GitHub Callback
+app.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    failureRedirect: "/",
+  }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
+// Logout
+app.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    req.session.destroy(() => {
+      res.redirect("/");
+    });
+  });
+});
+
+// ===========================
+// Home Route
+// ===========================
+
+app.get("/", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.send(`Logged in as ${req.user.displayName}`);
+  } else {
+    res.send("Logged Out");
+  }
+});
+
+// ===========================
+// API Routes
+// ===========================
+
+app.use("/", require("./routes"));
+
+// ===========================
 // Start Server
+// ===========================
+
 mongodb.initDb((err) => {
   if (err) {
     console.error(err);
   } else {
     app.listen(port, () => {
-      console.log(`Database is listening and node is running on port ${port}`);
+      console.log(`Database connected`);
+      console.log(`Server running on port ${port}`);
     });
   }
 });
