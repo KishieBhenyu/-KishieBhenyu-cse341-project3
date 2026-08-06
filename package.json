@@ -1,0 +1,20 @@
+{
+  "name": "cse341-project3",
+  "version": "1.0.0",
+  "description": "my third project",
+  "homepage": "https://github.com/KishieBhenyu/-KishieBhenyu-cse341-project3#readme",
+  "bugs": {
+    "url": "https://github.com/KishieBhenyu/-KishieBhenyu-cse341-project3/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KishieBhenyu/-KishieBhenyu-cse341-project3.git"
+  },
+  "license": "ISC",
+  "author": "kishie",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
