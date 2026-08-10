@@ -21,7 +21,7 @@ app.use(express.json());
 // Session configuration
 app.use(
     session({
-        secret: process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET || "development-secret",
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -46,18 +46,32 @@ app.use(
 // Passport GitHub Strategy
 // ======================
 
-passport.use(
-    new GitHubStrategy(
-        {
-            clientID: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: process.env.CALLBACK_URL
-        },
-        (accessToken, refreshToken, profile, done) => {
-            return done(null, profile);
-        }
-    )
-);
+// ======================
+// Passport GitHub Strategy
+// ======================
+
+if (
+    process.env.GITHUB_CLIENT_ID &&
+    process.env.GITHUB_CLIENT_SECRET &&
+    process.env.CALLBACK_URL
+) {
+    passport.use(
+        new GitHubStrategy(
+            {
+                clientID: process.env.GITHUB_CLIENT_ID,
+                clientSecret: process.env.GITHUB_CLIENT_SECRET,
+                callbackURL: process.env.CALLBACK_URL
+            },
+            (accessToken, refreshToken, profile, done) => {
+                return done(null, profile);
+            }
+        )
+    );
+
+    console.log("GitHub authentication configured.");
+} else {
+    console.log("GitHub authentication not configured yet.");
+}
 
 // ======================
 // Store user in session
