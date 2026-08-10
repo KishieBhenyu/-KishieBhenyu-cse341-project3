@@ -1,5 +1,5 @@
+
 const express = require("express");
-const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
 const GitHubStrategy = require("passport-github2").Strategy;
@@ -9,30 +9,37 @@ require("dotenv").config();
 const mongodb = require("./data/database");
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
 
 // ======================
 // Middleware
 // ======================
 
-app.use(bodyParser.json());
+// Parse JSON request bodies
+app.use(express.json());
 
+// Session configuration
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: false
+        }
+    })
 );
 
+// Passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
+// CORS
 app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
+    cors({
+        origin: true,
+        credentials: true
+    })
 );
 
 // ======================
@@ -40,26 +47,32 @@ app.use(
 // ======================
 
 passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL,
-    },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
-    }
-  )
+    new GitHubStrategy(
+        {
+            clientID: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            callbackURL: process.env.CALLBACK_URL
+        },
+        (accessToken, refreshToken, profile, done) => {
+            return done(null, profile);
+        }
+    )
 );
 
+// ======================
 // Store user in session
+// ======================
+
 passport.serializeUser((user, done) => {
-  done(null, user);
+    done(null, user);
 });
 
+// ======================
 // Retrieve user from session
+// ======================
+
 passport.deserializeUser((user, done) => {
-  done(null, user);
+    done(null, user);
 });
 
 // ======================
@@ -68,19 +81,19 @@ passport.deserializeUser((user, done) => {
 
 app.use("/", require("./routes"));
 
-
-
 // ======================
 // Start Server
 // ======================
 
 mongodb.initDb((err) => {
-  if (err) {
-    console.error(err);
-  } else {
+    if (err) {
+        console.error("Database connection failed:", err);
+        process.exit(1);
+    }
+
     app.listen(port, () => {
-      console.log("Database connected");
-      console.log(`Server running on port ${port}`);
+        console.log("Database connected");
+        console.log(`Server running on port ${port}`);
     });
-  }
 });
+

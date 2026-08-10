@@ -1,3 +1,4 @@
+
 const express = require("express");
 const passport = require("passport");
 
@@ -6,82 +7,56 @@ const router = express.Router();
 // Swagger
 router.use("/", require("./swagger"));
 
-/*
-==========================================
-HOME
-==========================================
-*/
-
+// HOME
 router.get("/", (req, res) => {
-  if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
+        const githubName =
+            req.user.username ||
+            req.user._json?.login ||
+            req.user.displayName ||
+            "GitHub User";
 
-    const githubName =
-      req.user.username ||
-      req.user._json?.login ||
-      req.user.displayName ||
-      "GitHub User";
-
-    res.send(`Logged in as ${githubName}`);
-
-  } else {
-    res.send("Logged Out");
-  }
-});
-
-/*
-==========================================
-LOGIN
-==========================================
-*/
-
-router.get(
-  "/login",
-  passport.authenticate("github", {
-    scope: ["user:email"],
-  })
-);
-
-/*
-==========================================
-CALLBACK
-==========================================
-*/
-
-router.get(
-  "/github/callback",
-  passport.authenticate("github", {
-    failureRedirect: "/",
-  }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
-
-/*
-==========================================
-LOGOUT
-==========================================
-*/
-
-router.get("/logout", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
+        res.send(`Logged in as ${githubName}`);
+    } else {
+        res.send("Logged Out");
     }
-
-    req.session.destroy(() => {
-      res.redirect("/");
-    });
-  });
 });
 
-/*
-==========================================
-API ROUTES
-==========================================
-*/
+// LOGIN
+router.get(
+    "/login",
+    passport.authenticate("github", {
+        scope: ["user:email"]
+    })
+);
 
-router.use("/books", require("./books"));
-router.use("/members", require("./members"));
+// GITHUB CALLBACK
+router.get(
+    "/github/callback",
+    passport.authenticate("github", {
+        failureRedirect: "/"
+    }),
+    (req, res) => {
+        res.redirect("/");
+    }
+);
+
+// LOGOUT
+router.get("/logout", (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+
+        req.session.destroy(() => {
+            res.redirect("/");
+        });
+    });
+});
+
+// API ROUTES
+router.use("/events", require("./events"));
+router.use("/venues", require("./venues"));
 
 module.exports = router;
+

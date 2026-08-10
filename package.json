@@ -1,20 +1,22 @@
+
 {
-  "name": "cse341_project2",
+  "name": "-KishieBhenyu-cse341-project3",
   "version": "1.0.0",
-  "description": "My second project",
-  "homepage": "https://github.com/KishieBhenyu/cse341_project2#readme",
+  "description": "My Third project",
+  "homepage": "https://github.com/-KishieBhenyu/-KishieBhenyu-cse341-project3#readme",
   "bugs": {
-    "url": "https://github.com/KishieBhenyu/cse341_project2/issues"
+    "url": "https://github.com/-KishieBhenyu/-KishieBhenyu-cse341-project3/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KishieBhenyu/cse341_project2.git"
+    "url": "git+https://github.com/-KishieBhenyu/-KishieBhenyu-cse341-project3.git"
   },
   "license": "ISC",
   "author": "Kishie Bhenyu",
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -31,3 +33,4 @@
     "swagger-ui-express": "^5.0.1"
   }
 }
+

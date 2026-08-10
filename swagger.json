@@ -1,258 +1,121 @@
+
 {
   "swagger": "2.0",
   "info": {
-    "title": "Library API",
-    "description": "Users Api",
+    "title": "Event Management API",
+    "description": "API for managing events and venues",
     "version": "1.0.0"
   },
-  "host": "cse341-project2-0064.onrender.com",
+  "host": "localhost:3002",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "Hello World"
-        ],
-        "description": "",
+        "summary": "Check login status",
+        "description": "Returns the current GitHub authentication status.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Login status returned successfully."
           }
         }
       }
     },
-    
-    "/books/": {
-      "get": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": ""
-                },
-                "author": {
-                  "example": ""
-                },
-                "genre": {
-                  "example": ""
-                },
 
-                "publishedYear": {
-                  "example": ""
-                },
-                "publisher": {
-                  "example": ""
-                },
-                "availableCopies": {
-                  "example": ""
-                },
-                "language": {
-                  "example": ""
-                }
-              }
-            }
-          }
-        ],
-  "responses": {
-  "201": {
-    "description": "Book created successfully"
-  },
-  "400": {
-    "description": "Bad Request - Missing required fields"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
-      }
-    },
-    "/books/{id}": {
+    "/login": {
       "get": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-       "responses": {
-  "200": {
-    "description": "Book found"
-  },
-  "404": {
-    "description": "Book not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": ""
-                },
-                "author": {
-                  "example": ""
-                },
-                "genre": {
-                  "example": ""
-                },
-                "publishedYear": {
-                  "example": ""
-                },
-                "publisher": {
-                  "example": ""
-                },
-                "availableCopies": {
-                  "example": ""
-                },
-                "language": {
-                  "example": ""
-                }
-              }
-            }
-          }
-        ],
-       "responses": {
-  "204": {
-    "description": "Book updated successfully"
-  },
-  "400": {
-    "description": "Bad Request - Missing required fields"
-  },
-  "404": {
-    "description": "Book not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "summary": "Login with GitHub",
+        "description": "Redirects the user to GitHub for authentication.",
         "responses": {
-  "204": {
-    "description": "Deleted successfully"
-  },
-  "404": {
-    "description": "Resource not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
+          "302": {
+            "description": "Redirect to GitHub."
+          }
+        }
       }
     },
-    "/members/": {
+
+    "/github/callback": {
       "get": {
-        "description": "",
-        "produces": [
-          "application/json"
+        "summary": "GitHub authentication callback",
+        "description": "Handles the callback from GitHub after authentication.",
+        "responses": {
+          "302": {
+            "description": "Redirect after authentication."
+          }
+        }
+      }
+    },
+
+    "/logout": {
+      "get": {
+        "summary": "Logout",
+        "description": "Logs the authenticated user out and destroys the session.",
+        "responses": {
+          "302": {
+            "description": "Redirect after logout."
+          }
+        }
+      }
+    },
+
+    "/events": {
+      "get": {
+        "summary": "Get all events",
+        "description": "Returns a list of all events.",
+        "tags": [
+          "Events"
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Events retrieved successfully."
+          },
+          "500": {
+            "description": "Server error."
           }
         }
       },
+
       "post": {
-        "description": "",
+        "summary": "Create an event",
+        "description": "Creates a new event. Authentication is required.",
+        "tags": [
+          "Events"
+        ],
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": {
-                  "example": ""
-                },
-                "lastName": {
-                  "example": ""
-                },
-                "email": {
-                  "example": ""
-                },
-                "phone": {
-                  "example": ""
-                },
-                "membershipDate": {
-                  "example": ""
-                },
-                "gender": {
-                  "example": ""
-                },
-                "age": {
-                  "example": ""
-                }
-              }
+              "$ref": "#/definitions/Event"
             }
           }
         ],
-       "responses": {
-  "201": {
-    "description": "Member created successfully"
-  },
-  "400": {
-    "description": "Bad Request - Missing required fields"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
+        "responses": {
+          "201": {
+            "description": "Event created successfully."
+          },
+          "400": {
+            "description": "All fields are required."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
       }
     },
-    "/members/{id}": {
+
+    "/events/{id}": {
       "get": {
-        "description": "",
-        "produces": [
-          "application/json"
+        "summary": "Get a single event",
+        "description": "Returns one event by its MongoDB ID.",
+        "tags": [
+          "Events"
         ],
         "parameters": [
           {
@@ -263,19 +126,27 @@
           }
         ],
         "responses": {
-  "200": {
-    "description": "Member found"
-  },
-  "404": {
-    "description": "Member not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
+          "200": {
+            "description": "Event retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid event ID."
+          },
+          "404": {
+            "description": "Event not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
       },
+
       "put": {
-        "description": "",
+        "summary": "Update an event",
+        "description": "Updates an existing event. Authentication is required.",
+        "tags": [
+          "Events"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -286,51 +157,37 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": {
-                  "example": ""
-                },
-                "lastName": {
-                  "example": ""
-                },
-                "email": {
-                  "example": ""
-                },
-                "phone": {
-                  "example": ""
-                },
-                "membershipDate": {
-                  "example": ""
-                },
-                "gender": {
-                  "example": ""
-                },
-                "age": {
-                  "example": ""
-                }
-              }
+              "$ref": "#/definitions/Event"
             }
           }
         ],
         "responses": {
-  "204": {
-    "description": "Member updated successfully"
-  },
-  "400": {
-    "description": "Bad Request - Missing required fields"
-  },
-  "404": {
-    "description": "Member not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
+          "204": {
+            "description": "Event updated successfully."
+          },
+          "400": {
+            "description": "Invalid event ID or missing fields."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Event not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
       },
+
       "delete": {
-        "description": "",
+        "summary": "Delete an event",
+        "description": "Deletes an event by its MongoDB ID. Authentication is required.",
+        "tags": [
+          "Events"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -340,17 +197,268 @@
           }
         ],
         "responses": {
-  "204": {
-    "description": "Deleted successfully"
+          "204": {
+            "description": "Event deleted successfully."
+          },
+          "400": {
+            "description": "Invalid event ID."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Event not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/venues": {
+      "get": {
+        "summary": "Get all venues",
+        "description": "Returns a list of all venues.",
+        "tags": [
+          "Venues"
+        ],
+        "responses": {
+          "200": {
+            "description": "Venues retrieved successfully."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "post": {
+        "summary": "Create a venue",
+        "description": "Creates a new venue. Authentication is required.",
+        "tags": [
+          "Venues"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Venue"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Venue created successfully."
+          },
+          "400": {
+            "description": "All fields are required."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/venues/{id}": {
+      "get": {
+        "summary": "Get a single venue",
+        "description": "Returns one venue by its MongoDB ID.",
+        "tags": [
+          "Venues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid venue ID."
+          },
+          "404": {
+            "description": "Venue not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update a venue",
+        "description": "Updates an existing venue. Authentication is required.",
+        "tags": [
+          "Venues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Venue"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Venue updated successfully."
+          },
+          "400": {
+            "description": "Invalid venue ID or missing fields."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Venue not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "delete": {
+        "summary": "Delete a venue",
+        "description": "Deletes a venue by its MongoDB ID. Authentication is required.",
+        "tags": [
+          "Venues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Venue deleted successfully."
+          },
+          "400": {
+            "description": "Invalid venue ID."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Venue not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    }
   },
-  "404": {
-    "description": "Resource not found"
-  },
-  "500": {
-    "description": "Internal Server Error"
-  }
-}
+
+  "definitions": {
+    "Event": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "date",
+        "startTime",
+        "endTime",
+        "organizer",
+        "ticketPrice"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Tech Conference 2026"
+        },
+        "description": {
+          "type": "string",
+          "example": "Annual technology conference."
+        },
+        "date": {
+          "type": "string",
+          "example": "2026-10-15"
+        },
+        "startTime": {
+          "type": "string",
+          "example": "09:00 AM"
+        },
+        "endTime": {
+          "type": "string",
+          "example": "05:00 PM"
+        },
+        "organizer": {
+          "type": "string",
+          "example": "Tech Hub Zimbabwe"
+        },
+        "ticketPrice": {
+          "type": "number",
+          "example": 50
+        }
+      }
+    },
+
+    "Venue": {
+      "type": "object",
+      "required": [
+        "name",
+        "address",
+        "city",
+        "country",
+        "capacity",
+        "contactEmail",
+        "contactPhone"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Harare International Conference Centre"
+        },
+        "address": {
+          "type": "string",
+          "example": "Samora Machel Avenue"
+        },
+        "city": {
+          "type": "string",
+          "example": "Harare"
+        },
+        "country": {
+          "type": "string",
+          "example": "Zimbabwe"
+        },
+        "capacity": {
+          "type": "integer",
+          "example": 4500
+        },
+        "contactEmail": {
+          "type": "string",
+          "example": "info@hicc.co.zw"
+        },
+        "contactPhone": {
+          "type": "string",
+          "example": "+263771234567"
+        }
       }
     }
   }
 }
+

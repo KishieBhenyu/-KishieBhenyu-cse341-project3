@@ -1,3 +1,4 @@
+
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -13,19 +14,21 @@ const initDb = (callback) => {
 
     MongoClient.connect(process.env.MONGODB_URL)
         .then((client) => {
-            database = client.db("library_db"); 
-            console.log("Database connected");
+            database = client.db("event_management_db");
+
+            console.log("Event Management database connected");
 
             callback(null, database);
         })
         .catch((err) => {
+            console.error("Database connection failed:", err);
             callback(err);
         });
 };
 
 const getDatabase = () => {
     if (!database) {
-        throw Error("Database not initialized");
+        throw new Error("Database not initialized");
     }
 
     return database;
@@ -33,5 +36,6 @@ const getDatabase = () => {
 
 module.exports = {
     initDb,
-    getDatabase,
+    getDatabase
 };
+

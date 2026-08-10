@@ -1,76 +1,95 @@
-//LOCAL HOST
-###Get all books
-GET http://localhost:3001/books
+### LOCAL HOST
 
-###Get a single book
-GET http://localhost:3001/books/6a5d31ca1acf118d67d029e3
+### Get all events
 
-####Create a new book
-POST http://localhost:3001/books
+GET http://localhost:3002/events
+
+
+### Get a single event
+
+GET http://localhost:3002/events/6a7981cffb77f5b929943463
+
+
+### Create a new event
+
+POST http://localhost:3002/events
 Content-Type: application/json
 
 {
- "title": "Love story",
- "author": "Tinevimbo Moyo",
- "genre": "Romance",
- "publishedYear": 20121,
- "publisher": "Probook",
- "availableCopies": 5,
- "language": "English"
+    "title": "Tech Conference 2026",
+    "description": "Annual technology conference.",
+    "date": "2026-10-15",
+    "startTime": "09:00 AM",
+    "endTime": "05:00 PM",
+    "organizer": "Tech Hub Zimbabwe",
+    "ticketPrice": 50
 }
 
-###Update a book
-PUT http://localhost:3001/books/6a5d31ca1acf118d67d029e3
+
+### Update an event
+
+PUT http://localhost:3002/events/6a7981cffb77f5b929943463
 Content-Type: application/json
 
 {
- "title": "The Great Gatsby",
- "author": "F. Scott Fitzgerald",
- "genre": "Drama",
- "publishedYear": 1925,
- "publisher": "Scribner",
- "availableCopies": 10,
- "language": "English"
+    "title": "Tech Conference 2026 - Updated",
+    "description": "Updated annual technology conference.",
+    "date": "2026-10-20",
+    "startTime": "10:00 AM",
+    "endTime": "06:00 PM",
+    "organizer": "Tech Hub Zimbabwe",
+    "ticketPrice": 60
 }
 
-###Delete a book
-DELETE http://localhost:3001/books/6a5dee73582ea10cd7db5270
 
-###Get all members
-GET http://localhost:3001/members
+### Delete an event
 
-###Get a single member
-GET http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+DELETE http://localhost:3002/events/6a7981cffb77f5b929943463
 
-###Create a new member
-POST http://localhost:3001/members
+
+### Get all venues
+
+GET http://localhost:3002/venues
+
+
+### Get a single venue
+
+GET http://localhost:3002/venues/6a798430fb77f5b92994346c
+
+
+### Create a new venue
+
+POST http://localhost:3002/venues
 Content-Type: application/json
 
 {
- 
-"firstName":"John",
-"lastName":"Moyo",
-"email":"john@gmail.com",
-"phone":"0771234567",
-"membershipDate":"2026-07-19",
-"gender":"Male",
-"age":30
+    "name": "Harare International Conference Centre",
+    "address": "Samora Machel Avenue",
+    "city": "Harare",
+    "country": "Zimbabwe",
+    "capacity": 4500,
+    "contactEmail": "info@hicc.co.zw",
+    "contactPhone": "+263771234567"
 }
 
-###Update a member
-PUT http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+
+### Update a venue
+
+PUT http://localhost:3002/venues/6a798430fb77f5b92994346c
 Content-Type: application/json
 
 {
- "firstName":"Peter",
- "lastName":"Moyo",
- "email":"john@gmail.com",
- "phone":"0771234567",
- "membershipDate":"2026-07-19",
- "gender":"Male",
- "age":30
+    "name": "Harare International Conference Centre - Main Hall",
+    "address": "Samora Machel Avenue",
+    "city": "Harare",
+    "country": "Zimbabwe",
+    "capacity": 5000,
+    "contactEmail": "events@hicc.co.zw",
+    "contactPhone": "+263771234567"
 }
 
-###Delete a member
-DELETE http://localhost:3001/members/6a5d34dd1acf118d67d029e5
+
+### Delete a venue
+
+DELETE http://localhost:3002/venues/6a798430fb77f5b92994346c
 
