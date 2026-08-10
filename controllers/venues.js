@@ -8,14 +8,15 @@ const getAll = async (req, res) => {
         const results = await mongodb
             .getDatabase()
             .collection("venues")
-            .find();
+            .find()
+            .toArray();
 
-        const lists = await results.toArray();
-
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(lists);
+        res.status(200).json(results);
     } catch (error) {
+        console.error("Error getting venues:", error);
+
         res.status(500).json({
+            message: "An error occurred while retrieving venues.",
             error: error.message
         });
     }
@@ -24,13 +25,16 @@ const getAll = async (req, res) => {
 // GET single venue
 const getSingle = async (req, res) => {
     try {
-        if (!ObjectId.isValid(req.params.id)) {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
             return res.status(400).json({
                 message: "Invalid venue ID."
             });
         }
 
-        const venueId = new ObjectId(req.params.id);
+        const venueId = new ObjectId(id);
 
         const result = await mongodb
             .getDatabase()
@@ -45,10 +49,12 @@ const getSingle = async (req, res) => {
             });
         }
 
-        res.setHeader("Content-Type", "application/json");
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error getting venue:", error);
+
         res.status(500).json({
+            message: "An error occurred while retrieving the venue.",
             error: error.message
         });
     }
@@ -67,7 +73,7 @@ const createVenue = async (req, res) => {
             contactPhone
         } = req.body;
 
-        // Validation
+        // Validate required fields
         if (
             !name ||
             !address ||
@@ -78,7 +84,21 @@ const createVenue = async (req, res) => {
             !contactPhone
         ) {
             return res.status(400).json({
-                message: "All fields are required."
+                message: "All venue fields are required."
+            });
+        }
+
+        // Validate capacity
+        if (typeof capacity !== "number" || capacity < 0) {
+            return res.status(400).json({
+                message: "Capacity must be a positive number or zero."
+            });
+        }
+
+        // Validate email
+        if (!contactEmail.includes("@")) {
+            return res.status(400).json({
+                message: "Please provide a valid contact email."
             });
         }
 
@@ -97,18 +117,21 @@ const createVenue = async (req, res) => {
             .collection("venues")
             .insertOne(venue);
 
-        if (response.acknowledged) {
-            res.status(201).json({
-                message: "Venue created successfully",
-                id: response.insertedId
-            });
-        } else {
-            res.status(500).json({
+        if (!response.acknowledged) {
+            return res.status(500).json({
                 message: "Failed to create venue."
             });
         }
+
+        res.status(201).json({
+            message: "Venue created successfully.",
+            id: response.insertedId
+        });
     } catch (error) {
+        console.error("Error creating venue:", error);
+
         res.status(500).json({
+            message: "An error occurred while creating the venue.",
             error: error.message
         });
     }
@@ -117,6 +140,15 @@ const createVenue = async (req, res) => {
 // PUT update venue
 const updateVenue = async (req, res) => {
     try {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message: "Invalid venue ID."
+            });
+        }
+
         const {
             name,
             address,
@@ -127,7 +159,7 @@ const updateVenue = async (req, res) => {
             contactPhone
         } = req.body;
 
-        // Validation
+        // Validate required fields
         if (
             !name ||
             !address ||
@@ -138,17 +170,25 @@ const updateVenue = async (req, res) => {
             !contactPhone
         ) {
             return res.status(400).json({
-                message: "All fields are required."
+                message: "All venue fields are required."
             });
         }
 
-        if (!ObjectId.isValid(req.params.id)) {
+        // Validate capacity
+        if (typeof capacity !== "number" || capacity < 0) {
             return res.status(400).json({
-                message: "Invalid venue ID."
+                message: "Capacity must be a positive number or zero."
             });
         }
 
-        const venueId = new ObjectId(req.params.id);
+        // Validate email
+        if (!contactEmail.includes("@")) {
+            return res.status(400).json({
+                message: "Please provide a valid contact email."
+            });
+        }
+
+        const venueId = new ObjectId(id);
 
         const venue = {
             name,
@@ -170,19 +210,24 @@ const updateVenue = async (req, res) => {
                 venue
             );
 
-        if (response.modifiedCount > 0) {
-            res.status(204).send();
-        } else if (response.matchedCount === 0) {
-            res.status(404).json({
+        if (response.matchedCount === 0) {
+            return res.status(404).json({
                 message: "Venue not found."
             });
-        } else {
-            res.status(200).json({
+        }
+
+        if (response.modifiedCount === 0) {
+            return res.status(200).json({
                 message: "No changes were made."
             });
         }
+
+        res.status(204).send();
     } catch (error) {
+        console.error("Error updating venue:", error);
+
         res.status(500).json({
+            message: "An error occurred while updating the venue.",
             error: error.message
         });
     }
@@ -191,13 +236,16 @@ const updateVenue = async (req, res) => {
 // DELETE venue
 const deleteVenue = async (req, res) => {
     try {
-        if (!ObjectId.isValid(req.params.id)) {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
             return res.status(400).json({
                 message: "Invalid venue ID."
             });
         }
 
-        const venueId = new ObjectId(req.params.id);
+        const venueId = new ObjectId(id);
 
         const response = await mongodb
             .getDatabase()
@@ -206,15 +254,18 @@ const deleteVenue = async (req, res) => {
                 _id: venueId
             });
 
-        if (response.deletedCount > 0) {
-            res.status(204).send();
-        } else {
-            res.status(404).json({
+        if (response.deletedCount === 0) {
+            return res.status(404).json({
                 message: "Venue not found."
             });
         }
+
+        res.status(204).send();
     } catch (error) {
+        console.error("Error deleting venue:", error);
+
         res.status(500).json({
+            message: "An error occurred while deleting the venue.",
             error: error.message
         });
     }

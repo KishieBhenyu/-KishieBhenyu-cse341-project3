@@ -8,14 +8,15 @@ const getAll = async (req, res) => {
         const results = await mongodb
             .getDatabase()
             .collection("events")
-            .find();
+            .find()
+            .toArray();
 
-        const lists = await results.toArray();
-
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(lists);
+        res.status(200).json(results);
     } catch (error) {
+        console.error("Error getting events:", error);
+
         res.status(500).json({
+            message: "An error occurred while retrieving events.",
             error: error.message
         });
     }
@@ -24,13 +25,16 @@ const getAll = async (req, res) => {
 // GET single event
 const getSingle = async (req, res) => {
     try {
-        if (!ObjectId.isValid(req.params.id)) {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
             return res.status(400).json({
                 message: "Invalid event ID."
             });
         }
 
-        const eventId = new ObjectId(req.params.id);
+        const eventId = new ObjectId(id);
 
         const result = await mongodb
             .getDatabase()
@@ -45,10 +49,12 @@ const getSingle = async (req, res) => {
             });
         }
 
-        res.setHeader("Content-Type", "application/json");
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error getting event:", error);
+
         res.status(500).json({
+            message: "An error occurred while retrieving the event.",
             error: error.message
         });
     }
@@ -67,7 +73,7 @@ const createEvent = async (req, res) => {
             ticketPrice
         } = req.body;
 
-        // Validation
+        // Validate required fields
         if (
             !title ||
             !description ||
@@ -78,7 +84,14 @@ const createEvent = async (req, res) => {
             ticketPrice === undefined
         ) {
             return res.status(400).json({
-                message: "All fields are required."
+                message: "All event fields are required."
+            });
+        }
+
+        // Validate ticket price
+        if (typeof ticketPrice !== "number" || ticketPrice < 0) {
+            return res.status(400).json({
+                message: "Ticket price must be a positive number or zero."
             });
         }
 
@@ -97,18 +110,21 @@ const createEvent = async (req, res) => {
             .collection("events")
             .insertOne(event);
 
-        if (response.acknowledged) {
-            res.status(201).json({
-                message: "Event created successfully",
-                id: response.insertedId
-            });
-        } else {
-            res.status(500).json({
+        if (!response.acknowledged) {
+            return res.status(500).json({
                 message: "Failed to create event."
             });
         }
+
+        res.status(201).json({
+            message: "Event created successfully.",
+            id: response.insertedId
+        });
     } catch (error) {
+        console.error("Error creating event:", error);
+
         res.status(500).json({
+            message: "An error occurred while creating the event.",
             error: error.message
         });
     }
@@ -117,6 +133,15 @@ const createEvent = async (req, res) => {
 // PUT update event
 const updateEvent = async (req, res) => {
     try {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message: "Invalid event ID."
+            });
+        }
+
         const {
             title,
             description,
@@ -127,7 +152,7 @@ const updateEvent = async (req, res) => {
             ticketPrice
         } = req.body;
 
-        // Validation
+        // Validate required fields
         if (
             !title ||
             !description ||
@@ -138,17 +163,18 @@ const updateEvent = async (req, res) => {
             ticketPrice === undefined
         ) {
             return res.status(400).json({
-                message: "All fields are required."
+                message: "All event fields are required."
             });
         }
 
-        if (!ObjectId.isValid(req.params.id)) {
+        // Validate ticket price
+        if (typeof ticketPrice !== "number" || ticketPrice < 0) {
             return res.status(400).json({
-                message: "Invalid event ID."
+                message: "Ticket price must be a positive number or zero."
             });
         }
 
-        const eventId = new ObjectId(req.params.id);
+        const eventId = new ObjectId(id);
 
         const event = {
             title,
@@ -168,19 +194,24 @@ const updateEvent = async (req, res) => {
                 event
             );
 
-        if (response.modifiedCount > 0) {
-            res.status(204).send();
-        } else if (response.matchedCount === 0) {
-            res.status(404).json({
+        if (response.matchedCount === 0) {
+            return res.status(404).json({
                 message: "Event not found."
             });
-        } else {
-            res.status(200).json({
+        }
+
+        if (response.modifiedCount === 0) {
+            return res.status(200).json({
                 message: "No changes were made."
             });
         }
+
+        res.status(204).send();
     } catch (error) {
+        console.error("Error updating event:", error);
+
         res.status(500).json({
+            message: "An error occurred while updating the event.",
             error: error.message
         });
     }
@@ -189,13 +220,16 @@ const updateEvent = async (req, res) => {
 // DELETE event
 const deleteEvent = async (req, res) => {
     try {
-        if (!ObjectId.isValid(req.params.id)) {
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!ObjectId.isValid(id)) {
             return res.status(400).json({
                 message: "Invalid event ID."
             });
         }
 
-        const eventId = new ObjectId(req.params.id);
+        const eventId = new ObjectId(id);
 
         const response = await mongodb
             .getDatabase()
@@ -204,15 +238,18 @@ const deleteEvent = async (req, res) => {
                 _id: eventId
             });
 
-        if (response.deletedCount > 0) {
-            res.status(204).send();
-        } else {
-            res.status(404).json({
+        if (response.deletedCount === 0) {
+            return res.status(404).json({
                 message: "Event not found."
             });
         }
+
+        res.status(204).send();
     } catch (error) {
+        console.error("Error deleting event:", error);
+
         res.status(500).json({
+            message: "An error occurred while deleting the event.",
             error: error.message
         });
     }
