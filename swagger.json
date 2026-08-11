@@ -1,8 +1,9 @@
+
 {
   "swagger": "2.0",
   "info": {
     "title": "Event Management API",
-    "description": "API for managing events and venues",
+    "description": "API for managing events, venues, attendees, and hosts",
     "version": "1.0.0"
   },
   "host": "cse341-project3-kyws.onrender.com",
@@ -22,6 +23,7 @@
         }
       }
     },
+
     "/login": {
       "get": {
         "summary": "Login with GitHub",
@@ -96,7 +98,7 @@
             "description": "Event created successfully."
           },
           "400": {
-            "description": "All fields are required."
+            "description": "All event fields are required or invalid."
           },
           "401": {
             "description": "Authentication required."
@@ -252,7 +254,7 @@
             "description": "Venue created successfully."
           },
           "400": {
-            "description": "All fields are required."
+            "description": "All venue fields are required or invalid."
           },
           "401": {
             "description": "Authentication required."
@@ -368,6 +370,318 @@
           }
         }
       }
+    },
+
+    "/attendees": {
+      "get": {
+        "summary": "Get all attendees",
+        "description": "Returns a list of all attendees.",
+        "tags": [
+          "Attendees"
+        ],
+        "responses": {
+          "200": {
+            "description": "Attendees retrieved successfully."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "post": {
+        "summary": "Create an attendee",
+        "description": "Creates a new attendee. Authentication is required.",
+        "tags": [
+          "Attendees"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Attendee"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Attendee created successfully."
+          },
+          "400": {
+            "description": "All attendee fields are required or invalid."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/attendees/{id}": {
+      "get": {
+        "summary": "Get a single attendee",
+        "description": "Returns one attendee by its MongoDB ID.",
+        "tags": [
+          "Attendees"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attendee retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid attendee ID."
+          },
+          "404": {
+            "description": "Attendee not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update an attendee",
+        "description": "Updates an existing attendee. Authentication is required.",
+        "tags": [
+          "Attendees"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Attendee"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Attendee updated successfully."
+          },
+          "400": {
+            "description": "Invalid attendee ID or missing fields."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Attendee not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "delete": {
+        "summary": "Delete an attendee",
+        "description": "Deletes an attendee by its MongoDB ID. Authentication is required.",
+        "tags": [
+          "Attendees"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Attendee deleted successfully."
+          },
+          "400": {
+            "description": "Invalid attendee ID."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Attendee not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/hosts": {
+      "get": {
+        "summary": "Get all hosts",
+        "description": "Returns a list of all hosts.",
+        "tags": [
+          "Hosts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Hosts retrieved successfully."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "post": {
+        "summary": "Create a host",
+        "description": "Creates a new host. Authentication is required.",
+        "tags": [
+          "Hosts"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Host created successfully."
+          },
+          "400": {
+            "description": "All host fields are required or invalid."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+
+    "/hosts/{id}": {
+      "get": {
+        "summary": "Get a single host",
+        "description": "Returns one host by its MongoDB ID.",
+        "tags": [
+          "Hosts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Host retrieved successfully."
+          },
+          "400": {
+            "description": "Invalid host ID."
+          },
+          "404": {
+            "description": "Host not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update a host",
+        "description": "Updates an existing host. Authentication is required.",
+        "tags": [
+          "Hosts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Host updated successfully."
+          },
+          "400": {
+            "description": "Invalid host ID or missing fields."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Host not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+
+      "delete": {
+        "summary": "Delete a host",
+        "description": "Deletes a host by its MongoDB ID. Authentication is required.",
+        "tags": [
+          "Hosts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Host deleted successfully."
+          },
+          "400": {
+            "description": "Invalid host ID."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Host not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
     }
   },
 
@@ -415,97 +729,6 @@
       }
     },
 
-"Attendee": {
-  "type": "object",
-  "required": [
-    "firstName",
-    "lastName",
-    "email",
-    "phone",
-    "eventId",
-    "registrationDate",
-    "ticketType",
-    "status"
-  ],
-  "properties": {
-    "firstName": {
-      "type": "string",
-      "example": "John"
-    },
-    "lastName": {
-      "type": "string",
-      "example": "Moyo"
-    },
-    "email": {
-      "type": "string",
-      "example": "john@example.com"
-    },
-    "phone": {
-      "type": "string",
-      "example": "+263771234567"
-    },
-    "eventId": {
-      "type": "string",
-      "example": "6a7981cffb77f5b929943463"
-    },
-    "registrationDate": {
-      "type": "string",
-      "example": "2026-08-11"
-    },
-    "ticketType": {
-      "type": "string",
-      "example": "Standard"
-    },
-    "status": {
-      "type": "string",
-      "example": "Registered"
-    }
-  }
-},
-
-"Host": {
-  "type": "object",
-  "required": [
-    "name",
-    "organization",
-    "email",
-    "phone",
-    "address",
-    "city",
-    "country"
-  ],
-  "properties": {
-    "name": {
-      "type": "string",
-      "example": "Tech Hub Zimbabwe"
-    },
-    "organization": {
-      "type": "string",
-      "example": "Zimbabwe Technology Association"
-    },
-    "email": {
-      "type": "string",
-      "example": "info@techhub.co.zw"
-    },
-    "phone": {
-      "type": "string",
-      "example": "+263771234567"
-    },
-    "address": {
-      "type": "string",
-      "example": "Samora Machel Avenue"
-    },
-    "city": {
-      "type": "string",
-      "example": "Harare"
-    },
-    "country": {
-      "type": "string",
-      "example": "Zimbabwe"
-    }
-  }
-},
-
     "Venue": {
       "type": "object",
       "required": [
@@ -545,6 +768,99 @@
         "contactPhone": {
           "type": "string",
           "example": "+263771234567"
+        }
+      }
+    },
+
+    "Attendee": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "phone",
+        "eventId",
+        "registrationDate",
+        "ticketType",
+        "status"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Moyo"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "john@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "+263771234567"
+        },
+        "eventId": {
+          "type": "string",
+          "example": "6a7981cffb77f5b929943463"
+        },
+        "registrationDate": {
+          "type": "string",
+          "example": "2026-08-11"
+        },
+        "ticketType": {
+          "type": "string",
+          "example": "Standard"
+        },
+        "status": {
+          "type": "string",
+          "example": "Registered"
+        }
+      }
+    },
+
+    "Host": {
+      "type": "object",
+      "required": [
+        "name",
+        "organization",
+        "email",
+        "phone",
+        "address",
+        "city",
+        "country"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Tech Hub Zimbabwe"
+        },
+        "organization": {
+          "type": "string",
+          "example": "Zimbabwe Technology Association"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "info@techhub.co.zw"
+        },
+        "phone": {
+          "type": "string",
+          "example": "+263771234567"
+        },
+        "address": {
+          "type": "string",
+          "example": "Samora Machel Avenue"
+        },
+        "city": {
+          "type": "string",
+          "example": "Harare"
+        },
+        "country": {
+          "type": "string",
+          "example": "Zimbabwe"
         }
       }
     }
