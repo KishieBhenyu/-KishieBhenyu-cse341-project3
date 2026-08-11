@@ -27,7 +27,6 @@ const getSingle = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate ObjectId
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({
                 message: "Invalid host ID."
@@ -70,8 +69,7 @@ const createHost = async (req, res) => {
             phone,
             address,
             city,
-            country,
-            website
+            country
         } = req.body;
 
         // Validate required fields
@@ -82,8 +80,7 @@ const createHost = async (req, res) => {
             !phone ||
             !address ||
             !city ||
-            !country ||
-            !website
+            !country
         ) {
             return res.status(400).json({
                 message: "All host fields are required."
@@ -97,16 +94,6 @@ const createHost = async (req, res) => {
             });
         }
 
-        // Validate website
-        if (
-            !website.startsWith("http://") &&
-            !website.startsWith("https://")
-        ) {
-            return res.status(400).json({
-                message: "Website must start with http:// or https://."
-            });
-        }
-
         const host = {
             name,
             organization,
@@ -114,8 +101,7 @@ const createHost = async (req, res) => {
             phone,
             address,
             city,
-            country,
-            website
+            country
         };
 
         const response = await mongodb
@@ -162,8 +148,7 @@ const updateHost = async (req, res) => {
             phone,
             address,
             city,
-            country,
-            website
+            country
         } = req.body;
 
         // Validate required fields
@@ -174,8 +159,7 @@ const updateHost = async (req, res) => {
             !phone ||
             !address ||
             !city ||
-            !country ||
-            !website
+            !country
         ) {
             return res.status(400).json({
                 message: "All host fields are required."
@@ -189,16 +173,6 @@ const updateHost = async (req, res) => {
             });
         }
 
-        // Validate website
-        if (
-            !website.startsWith("http://") &&
-            !website.startsWith("https://")
-        ) {
-            return res.status(400).json({
-                message: "Website must start with http:// or https://."
-            });
-        }
-
         const hostId = new ObjectId(id);
 
         const host = {
@@ -208,15 +182,16 @@ const updateHost = async (req, res) => {
             phone,
             address,
             city,
-            country,
-            website
+            country
         };
 
         const response = await mongodb
             .getDatabase()
             .collection("hosts")
             .replaceOne(
-                { _id: hostId },
+                {
+                    _id: hostId
+                },
                 host
             );
 
