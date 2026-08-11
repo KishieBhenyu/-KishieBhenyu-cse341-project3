@@ -57,6 +57,8 @@ router.get("/logout", (req, res, next) => {
 // API ROUTES
 router.use("/events", require("./events"));
 router.use("/venues", require("./venues"));
+router.use("/hosts", require("./hosts"));
+router.use("/attendees", require("./attendees"));
 
 module.exports = router;
 
