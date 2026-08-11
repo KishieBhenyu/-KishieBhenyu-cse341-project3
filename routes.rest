@@ -93,3 +93,213 @@ Content-Type: application/json
 
 DELETE http://localhost:3002/venues/6a798430fb77f5b92994346c
 
+```http
+### LOCAL HOST
+
+### =========================
+### EVENTS
+### =========================
+
+### Get all events
+
+GET http://localhost:3002/events
+
+
+### Get a single event
+
+GET http://localhost:3002/events/6a7981cffb77f5b929943463
+
+
+### Create a new event
+
+POST http://localhost:3002/events
+Content-Type: application/json
+
+{
+  "title": "Tech Conference 2026",
+  "description": "Annual technology conference.",
+  "date": "2026-10-15",
+  "startTime": "09:00 AM",
+  "endTime": "05:00 PM",
+  "organizer": "Tech Hub Zimbabwe",
+  "ticketPrice": 50
+}
+
+
+### Update an event
+
+PUT http://localhost:3002/events/6a7981cffb77f5b929943463
+Content-Type: application/json
+
+{
+  "title": "Tech Conference 2026 - Updated",
+  "description": "Updated annual technology conference.",
+  "date": "2026-10-20",
+  "startTime": "10:00 AM",
+  "endTime": "06:00 PM",
+  "organizer": "Tech Hub Zimbabwe",
+  "ticketPrice": 60
+}
+
+
+### Delete an event
+
+DELETE http://localhost:3002/events/6a7981cffb77f5b929943463
+
+
+### =========================
+### VENUES
+### =========================
+
+### Get all venues
+
+GET http://localhost:3002/venues
+
+
+### Get a single venue
+
+GET http://localhost:3002/venues/6a798430fb77f5b92994346c
+
+
+### Create a new venue
+
+POST http://localhost:3002/venues
+Content-Type: application/json
+
+{
+  "name": "Harare International Conference Centre",
+  "address": "Samora Machel Avenue",
+  "city": "Harare",
+  "country": "Zimbabwe",
+  "capacity": 4500,
+  "contactEmail": "info@hicc.co.zw",
+  "contactPhone": "+263771234567"
+}
+
+
+### Update a venue
+
+PUT http://localhost:3002/venues/6a798430fb77f5b92994346c
+Content-Type: application/json
+
+{
+  "name": "Harare International Conference Centre - Main Hall",
+  "address": "Samora Machel Avenue",
+  "city": "Harare",
+  "country": "Zimbabwe",
+  "capacity": 5000,
+  "contactEmail": "events@hicc.co.zw",
+  "contactPhone": "+263771234567"
+}
+
+
+### Delete a venue
+
+DELETE http://localhost:3002/venues/6a798430fb77f5b92994346c
+
+
+### =========================
+### ATTENDEES
+### =========================
+
+### Get all attendees
+
+GET http://localhost:3002/attendees
+
+
+### Get a single attendee
+
+GET http://localhost:3002/attendees/6a7b2047f33bb42b01f86a6a
+
+
+### Create a new attendee
+
+POST http://localhost:3002/attendees
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Moyo",
+  "email": "john@example.com",
+  "phone": "+263771234567",
+  "eventId": "6a7981cffb77f5b929943463",
+  "registrationDate": "2026-08-11",
+  "ticketType": "Standard",
+  "status": "Registered"
+}
+
+
+### Update an attendee
+
+PUT http://localhost:3002/attendees/6a7b2047f33bb42b01f86a6a
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Moyo",
+  "email": "john.moyo@example.com",
+  "phone": "+263771234567",
+  "eventId": "6a7981cffb77f5b929943463",
+  "registrationDate": "2026-08-11",
+  "ticketType": "VIP",
+  "status": "Registered"
+}
+
+
+### Delete an attendee
+
+DELETE http://localhost:3002/attendees/6a7b2047f33bb42b01f86a6a
+
+
+### =========================
+### HOSTS
+### =========================
+
+### Get all hosts
+
+GET http://localhost:3002/hosts
+
+
+### Get a single host
+
+GET http://localhost:3002/hosts/6a7b243cf33bb42b01f86a71
+
+
+### Create a new host
+
+POST http://localhost:3002/hosts
+Content-Type: application/json
+
+{
+  "name": "Tech Hub Zimbabwe",
+  "organization": "Zimbabwe Technology Association",
+  "email": "info@techhub.co.zw",
+  "phone": "+263771234567",
+  "address": "Samora Machel Avenue",
+  "city": "Harare",
+  "country": "Zimbabwe",
+  "website": "https://techhub.co.zw"
+}
+
+
+### Update a host
+
+PUT http://localhost:3002/hosts/6a7b243cf33bb42b01f86a71
+Content-Type: application/json
+
+{
+  "name": "Tech Hub Zimbabwe Updated",
+  "organization": "Zimbabwe Technology Association",
+  "email": "events@techhub.co.zw",
+  "phone": "+263771234567",
+  "address": "Samora Machel Avenue",
+  "city": "Harare",
+  "country": "Zimbabwe",
+  "website": "https://techhub.co.zw"
+}
+
+
+### Delete a host
+
+DELETE http://localhost:3002/hosts/6a7b243cf33bb42b01f86a71
+```
