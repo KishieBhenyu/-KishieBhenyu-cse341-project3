@@ -22,7 +22,7 @@
         }
       }
     },
-    
+
     "/login": {
       "get": {
         "summary": "Login with GitHub",
@@ -387,31 +387,31 @@
       "properties": {
         "title": {
           "type": "string",
-          "example": "Tech Conference 2026"
+          "example": ""
         },
         "description": {
           "type": "string",
-          "example": "Annual technology conference."
+          "example": ""
         },
         "date": {
           "type": "string",
-          "example": "2026-10-15"
+          "example": ""
         },
         "startTime": {
           "type": "string",
-          "example": "09:00 AM"
+          "example": ""
         },
         "endTime": {
           "type": "string",
-          "example": "05:00 PM"
+          "example": ""
         },
         "organizer": {
           "type": "string",
-          "example": "Tech Hub Zimbabwe"
+          "example": ""
         },
         "ticketPrice": {
           "type": "number",
-          "example": 50
+          "example": 
         }
       }
     },
@@ -430,31 +430,31 @@
       "properties": {
         "name": {
           "type": "string",
-          "example": "Harare International Conference Centre"
+          "example": ""
         },
         "address": {
           "type": "string",
-          "example": "Samora Machel Avenue"
+          "example": ""
         },
         "city": {
           "type": "string",
-          "example": "Harare"
+          "example": ""
         },
         "country": {
           "type": "string",
-          "example": "Zimbabwe"
+          "example": ""
         },
         "capacity": {
           "type": "integer",
-          "example": 4500
+          "example": 
         },
         "contactEmail": {
           "type": "string",
-          "example": "info@hicc.co.zw"
+          "example": ""
         },
         "contactPhone": {
           "type": "string",
-          "example": "+263771234567"
+          "example": ""
         }
       }
     }
