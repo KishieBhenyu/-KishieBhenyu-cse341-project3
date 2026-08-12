@@ -1,4 +1,3 @@
-
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
@@ -15,10 +14,8 @@ const port = process.env.PORT || 3002;
 // Middleware
 // ======================
 
-// Parse JSON request bodies
 app.use(express.json());
 
-// Session configuration
 app.use(
     session({
         secret: process.env.SESSION_SECRET || "development-secret",
@@ -30,21 +27,15 @@ app.use(
     })
 );
 
-// Passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
-// CORS
 app.use(
     cors({
         origin: true,
         credentials: true
     })
 );
-
-// ======================
-// Passport GitHub Strategy
-// ======================
 
 // ======================
 // Passport GitHub Strategy
@@ -74,16 +65,12 @@ if (
 }
 
 // ======================
-// Store user in session
+// Passport Session
 // ======================
 
 passport.serializeUser((user, done) => {
     done(null, user);
 });
-
-// ======================
-// Retrieve user from session
-// ======================
 
 passport.deserializeUser((user, done) => {
     done(null, user);
@@ -96,18 +83,34 @@ passport.deserializeUser((user, done) => {
 app.use("/", require("./routes"));
 
 // ======================
-// Start Server
+// Start Database and Server
 // ======================
 
-mongodb.initDb((err) => {
-    if (err) {
-        console.error("Database connection failed:", err);
-        process.exit(1);
-    }
+const startServer = () => {
+    mongodb.initDb((err) => {
+        if (err) {
+            console.error("Database connection failed:", err);
+            process.exit(1);
+        }
 
-    app.listen(port, () => {
         console.log("Database connected");
-        console.log(`Server running on port ${port}`);
-    });
-});
 
+        if (require.main === module) {
+            app.listen(port, () => {
+                console.log(`Server running on port ${port}`);
+            });
+        }
+    });
+};
+
+// Start automatically when running:
+// npm start
+if (require.main === module) {
+    startServer();
+}
+
+// Export for Jest/Supertest
+module.exports = {
+    app,
+    startServer
+};
