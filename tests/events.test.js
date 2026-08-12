@@ -1,5 +1,9 @@
 const request = require("supertest");
-const app = require("../server");
+const { app, startServer } = require("../server");
+
+beforeAll(async () => {
+    await startServer();
+});
 
 describe("Events API", () => {
 
@@ -15,7 +19,7 @@ describe("Events API", () => {
         const response = await request(app)
             .get("/events/6a7981cffb77f5b929943463");
 
-        expect([200, 404]).toContain(response.statusCode);
+        expect(response.statusCode).toBe(200);
     });
 
 });
