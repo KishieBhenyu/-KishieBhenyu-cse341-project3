@@ -14,7 +14,7 @@ const initDb = (callback) => {
 
     MongoClient.connect(process.env.MONGODB_URL)
         .then((client) => {
-            database = client.db("events_management");
+            database = client.db("events-management");
 
             console.log("Event Management database connected");
 

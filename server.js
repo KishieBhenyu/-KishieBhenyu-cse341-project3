@@ -83,43 +83,21 @@ passport.deserializeUser((user, done) => {
 app.use("/", require("./routes"));
 
 // ======================
-// Start Database and Server
+// Start Server
 // ======================
 
-const request = require("supertest");
-const { app, startServer } = require("../server");
-
-beforeAll(async () => {
-    await startServer();
-});
-
-describe("Hosts API", () => {
-
-    test("GET /hosts should return all hosts", async () => {
-        const response = await request(app)
-            .get("/hosts");
-
-        expect(response.statusCode).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-    });
-
-    test("GET /hosts/:id should return one host", async () => {
-        const response = await request(app)
-            .get("/hosts/6a7b243cf33bb42b01f86a71");
-
-        expect(response.statusCode).toBe(200);
-    });
-
-});
-
-// Start automatically when running:
-// npm start
 if (require.main === module) {
-    startServer();
+    mongodb.initDb((err) => {
+        if (err) {
+            console.error("Database connection failed:", err);
+            process.exit(1);
+        }
+
+        app.listen(port, () => {
+            console.log("Database connected");
+            console.log(`Server running on port ${port}`);
+        });
+    });
 }
 
-// Export for Jest/Supertest
-module.exports = {
-    app,
-    startServer
-};
+module.exports = app;
